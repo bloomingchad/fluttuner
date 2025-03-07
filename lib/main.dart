@@ -1,15 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 
-Future<void> initPlayer(AudioPlayer player) async {
+final player = AudioPlayer();
+
+Future<void> setPlayer(AudioPlayer player) async {
   final duration = await player.setUrl(           // Load a URL
       'https://nl.ah.fm/mobile');                 // Schemes: (https: | file: | asset: )
-  player.play();
-  //return void
 }
-final player = AudioPlayer();
+
+Future<void> startPlayingPlayer(AudioPlayer player) async {
+  player.play();
+}
+
+Future<void> pausePlayer(AudioPlayer player) async {
+  player.pause();
+}
+
 void main() {
   runApp(const MyApp());
+  player.stop();
 }
 
 class MyApp extends StatelessWidget {
@@ -49,32 +58,43 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            const SizedBox(height: 20), // Add some space between the counter and the box
+            const SizedBox(height: 30), // Add some space between the counter and the box
             Container(
+              decoration: BoxDecoration(
+                color: const Color(0xFFF7B600),
+                  /*border: Border.all(
+                  width: 8,
+                ),*/
+                borderRadius: BorderRadius.circular(24),
+              ),
               width: 350, // Width of the rectangle
               height: 150, // Height of the rectangle
-              color: Colors.grey, // Background color of the rectangle
+              //color: Colors.redAccent, // Background color of the rectangle
               alignment: Alignment.topLeft, // Align the text to the center
               child: GestureDetector(
                 onTap: () {
                   // Handle the click event here
-                  print('Radio Station #1 clicked!');
-                  initPlayer(player);
+                  //print('Radio Station #1 clicked!');
+                  setPlayer(player);
+                  startPlayingPlayer(player);
                 },
-                child: const Text(
+                child: const Center(
+                  child: const Text(
+                  textAlign: TextAlign.center,
                   'Radio Station #1',
                   style: TextStyle(
                     color: Colors.white, // Text color
                     fontSize: 25, // Text size
+
                     fontWeight: FontWeight.normal, // Text weight
                   ),
                 ),
+              ),
               ),
             ),
           ],
         ),
       ),
-
     );
   }
 }
