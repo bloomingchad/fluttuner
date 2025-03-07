@@ -3,9 +3,11 @@ import 'package:just_audio/just_audio.dart';
 
 final player = AudioPlayer();
 
-Future<void> setPlayer(AudioPlayer player) async {
-  final duration = await player.setUrl(           // Load a URL
-      'https://nl.ah.fm/mobile');                 // Schemes: (https: | file: | asset: )
+Future<void> setupPlayer(AudioPlayer player) async {
+  await player.setUrl(
+    // Load a URL
+    'https://nl.ah.fm/mobile',
+  ); // Schemes: (https: | file: | asset: )
 }
 
 Future<void> startPlayingPlayer(AudioPlayer player) async {
@@ -24,6 +26,8 @@ void main() {
   runApp(const MyApp());
   stopPlayer(player);
 }
+
+bool isPlaying = false;
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -50,6 +54,12 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    setupPlayer(player);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,38 +72,55 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            const SizedBox(height: 30), // Add some space between the counter and the box
+            const SizedBox(
+              height: 30,
+            ), // Add some space between the counter and the box
+
             Container(
               decoration: BoxDecoration(
                 color: const Color(0xFFF7B600),
-                  /*border: Border.all(
-                  width: 8,
-                ),*/
-                borderRadius: BorderRadius.circular(24),
+                borderRadius: BorderRadius.circular(34),
               ),
-              width: 350, // Width of the rectangle
-              height: 150, // Height of the rectangle
+              width: 320, // Width of the rectangle
+              height: 120, // Height of the rectangle
               //color: Colors.redAccent, // Background color of the rectangle
               alignment: Alignment.topLeft, // Align the text to the center
-              child: GestureDetector(
-                onTap: () {
-                  // Handle the click event here
-                  //print('Radio Station #1 clicked!');
-                  setPlayer(player);
-                  startPlayingPlayer(player);
-                },
-                child: const Center(
-                  child: const Text(
-                  textAlign: TextAlign.center,
-                  'Radio Station #1',
-                  style: TextStyle(
-                    color: Colors.white, // Text color
-                    fontSize: 25, // Text size
+              child: Column(
+                children: [
+                  const SizedBox(height: 20),
+                  GestureDetector(
+                    onTap: () {
+                      // Handle the click event here
+                      //print('Radio Station #1 clicked!');
+                    },
+                    child: const Center(
+                      child: Text(
+                        textAlign: TextAlign.center,
+                        'Radio Station #1',
+                        style: TextStyle(
+                          color: Colors.white, // Text color
+                          fontSize: 25, // Text size
 
-                    fontWeight: FontWeight.normal, // Text weight
+                          fontWeight: FontWeight.normal, // Text weight
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-              ),
+                  IconButton(
+                    iconSize: 42,
+                    icon: Icon(isPlaying ? Icons.pause : Icons.play_arrow),
+                    onPressed: () {
+                      if (!isPlaying) {
+                        startPlayingPlayer(player);
+                      } else {
+                        pausePlayer(player);
+                      }
+                      setState(() {
+                        isPlaying = !isPlaying;
+                      });
+                    },
+                  ),
+                ],
               ),
             ),
           ],
