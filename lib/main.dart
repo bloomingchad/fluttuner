@@ -16,9 +16,13 @@ Future<void> pausePlayer(AudioPlayer player) async {
   player.pause();
 }
 
+Future<void> stopPlayer(AudioPlayer player) async {
+  player.stop();
+}
+
 void main() {
   runApp(const MyApp());
-  player.stop();
+  stopPlayer(player);
 }
 
 class MyApp extends StatelessWidget {
